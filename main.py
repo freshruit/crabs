@@ -6,10 +6,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import Qt
 from UI import Ui_Form
-from PyQt5.QtCore import Qt
+
 SCREEN_SIZE = [600, 450]
-MAX_scale = 10
-MIN_scale = 5
 
 
 class Map(QWidget, Ui_Form):
@@ -27,6 +25,7 @@ class Map(QWidget, Ui_Form):
         if self.sender():
             self.get_coords()
         self.getImage()
+
         self.pixmap = QPixmap(self.map_file)
         self.map_label.setPixmap(self.pixmap)
 
@@ -67,16 +66,6 @@ class Map(QWidget, Ui_Form):
     def closeEvent(self, event):
         """При закрытии формы подчищаем за собой"""
         os.remove(self.map_file)
-
-    # нажатие клавиш pgup и pgdn изменяет масштаб карты
-    def keyPressEvent(self, event):
-        scale = int(self.scale_edit.text())
-        if event.key() == Qt.Key_PageUp:
-            self.scale_edit.setText(str(scale + (1 if scale < MAX_scale else 0)))
-            self.show_map()
-        elif event.key() == Qt.Key_PageDown:
-            self.scale_edit.setText(str(scale - (1 if scale > MIN_scale else 0)))
-            self.show_map()
 
 
 def except_hook(cls, exception, traceback):
